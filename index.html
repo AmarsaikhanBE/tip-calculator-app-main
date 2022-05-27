@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- displays site properly based on user's device -->
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+
+    <title>Frontend Mentor | Tip calculator app</title>
+
+    <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
+         :root {
+            /* Primary */
+            --strong-cyan: hsl(172, 67%, 45%);
+            /* Neutral */
+            --very-dark-cyan: hsl(183, 100%, 15%);
+            --dark-grayish-cyan: hsl(186, 14%, 43%);
+            --grayish-cyan: hsl(184, 14%, 56%);
+            --light-grayish-cyan: hsl(185, 41%, 84%);
+            --very-light-grayish-cyan: hsl(189, 41%, 97%);
+            --white: hsl(0, 0%, 100%);
+            --alert: rgb(241, 98, 63);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 24px;
+            position: relative;
+            min-height: 100vh;
+            background-color: var(--light-grayish-cyan);
+            display: grid;
+            place-content: center;
+        }
+        
+        .attribution {
+            font-size: 11px;
+            text-align: center;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .attribution a {
+            color: hsl(228, 45%, 44%);
+        }
+        /* Mobile Design */
+        
+        img[alt='logo'] {
+            display: block;
+            margin: 3.125rem auto 2.5rem;
+        }
+        
+        .container {
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            padding: 0 2rem 2rem;
+            min-width: 375px;
+        }
+        
+        p {
+            color: var(--dark-grayish-cyan);
+            font-size: 1rem;
+            margin-top: 2rem;
+            margin-bottom: .5rem;
+            position: relative;
+        }
+        
+        .container>div:first-child p {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        
+        input {
+            width: 100%;
+            text-align: end;
+            height: 2.75rem;
+            background-color: var(--very-light-grayish-cyan);
+            padding: 0 1rem;
+            line-height: 2.75rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--grayish-cyan);
+            margin-bottom: .125rem;
+            border-radius: .5rem;
+            border-width: .125rem;
+            border-style: solid;
+            border-color: transparent;
+        }
+        
+        input::placeholder {
+            color: var(--grayish-cyan);
+        }
+        
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        input[type='number'] {
+            -moz-appearance: textfield;
+        }
+        
+        .bill::before,
+        .people::before {
+            display: block;
+            position: absolute;
+            color: var(--very-light-grayish-cyan);
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 1;
+            left: 1rem;
+            top: 2.625rem;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--strong-cyan);
+        }
+        
+        .bill::before {
+            content: url(./images/icon-dollar.svg);
+        }
+        
+        .people::before {
+            content: url(./images/icon-person.svg);
+        }
+        
+        .tips {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, calc(50% - .5rem));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .tip {
+            background-color: var(--very-dark-cyan);
+            border-radius: .5rem;
+            height: 3rem;
+            line-height: 3rem;
+            font-size: 1.625rem;
+            text-align: center;
+            color: var(--light-grayish-cyan);
+            cursor: pointer;
+            min-width: 105px;
+        }
+        
+        .tip::after {
+            content: '%';
+        }
+        
+        .tip:last-child,
+        .tip:last-child:hover,
+        .tip:last-child.active {
+            background: none;
+            cursor: default;
+        }
+        
+        .tip:last-child::after {
+            content: '';
+        }
+        
+        #customTip {
+            height: 3rem;
+            line-height: 3rem;
+        }
+        
+        .tip:hover,
+        .tip.active {
+            background-color: var(--strong-cyan);
+            color: var(--very-dark-cyan);
+        }
+        
+        .screen {
+            background-color: var(--very-dark-cyan);
+            border-radius: 1rem;
+            width: calc(100% + 1rem);
+            transform: translateX(-.5rem);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .screen p {
+            margin-top: 1rem;
+            color: var(--very-light-grayish-cyan);
+        }
+        
+        .tip-person,
+        .total-person {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0;
+        }
+        
+        .screen p::after {
+            content: '/ person';
+            display: block;
+            color: var(--light-grayish-cyan);
+            font-size: .8rem;
+        }
+        
+        .screen div div {
+            font-size: 2.125rem;
+            line-height: 1;
+            color: var(--strong-cyan);
+            transform: translateY(.125rem);
+        }
+        
+        .screen div div::before {
+            content: '$';
+        }
+        
+        #reset {
+            width: 100%;
+            margin-top: 1.5rem;
+            text-align: center;
+            height: 3rem;
+            line-height: 3rem;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            color: var(--very-dark-cyan);
+            background-color: var(--strong-cyan);
+            border: none;
+            border-radius: .5rem;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+        }
+        
+        #reset:disabled {
+            background-color: var(--dark-grayish-cyan);
+            cursor: default;
+        }
+        
+        p::after {
+            content: attr(after);
+            color: var(--alert);
+            font-size: .75rem;
+            /* display: none; */
+        }
+        
+        @media screen and (min-width:768px) {
+            .container {
+                display: grid;
+                grid-template-columns: repeat(2, calc(50% - 1rem));
+                gap: 2rem;
+            }
+            .tips {
+                grid-template-columns: repeat(3, calc((100% - 2rem)/3));
+            }
+            .screen {
+                width: 100%;
+                transform: translateX(0);
+                padding: 2rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .total-person {
+                transform: translateY(-50%);
+            }
+            .tip,
+            #customTip {
+                font-size: 1rem;
+                min-width: 5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <img src="./images/logo.svg" alt="logo">
+    <div class="container">
+        <div>
+            <p class="bill">Bill</p>
+            <input type="number" min="0.01" step="0.01" value="0" id="bill" onkeypress="return isNumberKey(event)" />
+            <p>Select Tip %</p>
+            <ul class="tips">
+                <li class="tip">5</li>
+                <li class="tip">10</li>
+                <li class="tip">15</li>
+                <li class="tip">25</li>
+                <li class="tip">50</li>
+                <li class="tip">
+                    <input type="number" min="0.01" step="0.01" placeholder="Custom" id="customTip" onkeypress="return isNumberKey(event)">
+                </li>
+            </ul>
+            <p class="people">Number of People</p>
+            <input type="number" min="1" step="1" value="0" id="person" onkeypress="return isNumberKey(event)">
+        </div>
+        <div class="screen">
+            <div class="tip-person">
+                <p>Tip Amount</p>
+                <div id="tip-person">0.00</div>
+            </div>
+            <div class="total-person">
+                <p>Total</p>
+                <div id="total-person">0.00</div>
+            </div>
+            <button id="reset" disabled>reset</button>
+        </div>
+    </div>
+    <script>
+        const paras = document.querySelectorAll('.container>div>p')
+        const tips = document.querySelectorAll('.tips .tip');
+        // input correct number
+        const isNumberKey = (e) => {
+            const charCode = (e.which) ? e.which : event.keyCode;
+            const value = e.target.value;
+            if (value == '0') {
+                if (charCode > 47 && charCode < 57) e.target.value = '';
+                else if (charCode != 46) return false;
+            } else if (value == '' && (charCode < 48 || charCode > 57) || (e.target.id == 'person' && (charCode < 48 || charCode > 57) || (value.indexOf('.') < 0 && (charCode < 46 || charCode == 47 || charCode > 57) || (value.indexOf('.') > 0 && (value.length - value.indexOf('.') > 2) || (value.indexOf('.') > 0 && charCode < 48 || charCode > 57)))) || (e.target.id == 'customTip' && (Number(value + e.key)) > 100)) return false;
+            //change text color when correct value insert
+            if (Number(value + e.key) > 0) {
+                e.target.style.color = 'var(--dark-grayish-cyan)';
+                e.target.style.borderColor = null;
+                document.querySelector('#reset').disabled = false;
+                if (e.target.id == 'bill') paras[0].setAttribute('after', "");
+                else if (e.target.id == 'customTip') paras[1].setAttribute('after', "");
+                else if (e.target.id == 'person') paras[2].setAttribute('after', "");
+            } else {
+                e.target.style.color = null;
+                e.target.style.borderColor = 'var(--alert)';
+                document.querySelector('#reset').disabled = true;
+                if (e.target.id == 'bill') paras[0].setAttribute('after', "Can't be zero");
+                else if (e.target.id == 'customTip') paras[1].setAttribute('after', "Can't be zero");
+                else if (e.target.id == 'person') paras[2].setAttribute('after', "Can't be zero");
+            };
+        };
+        tips.forEach(tip => {
+            tip.onclick = () => {
+                if (document.querySelector('.tips .active') != null) document.querySelector('.tips .active').classList.remove('active');
+                tip.classList.add('active')
+            }
+        });
+        // Calculate tip
+        document.querySelector('#reset').onclick = event => {
+            if (event.target.disabled == false) {
+                if (Number(document.querySelector('#bill').value) == 0) {
+                    paras[0].setAttribute('after', "Can't be zero");
+                    document.querySelector('#bill').style.borderColor = 'var(--alert)'
+                } else if (document.querySelector('.tips .active') == null) {
+                    paras[1].setAttribute('after', "Can't be zero");
+                } else if (document.querySelector('.tips .tip:last-child.active') != null && Number(document.querySelector('#customTip').value) == 0) {
+                    paras[1].setAttribute('after', "Can't be zero");
+                    document.querySelector('#customTip').style.borderColor = 'var(--alert)'
+                } else if (Number(document.querySelector('#person').value) == 0) {
+                    paras[2].setAttribute('after', "Can't be zero");
+                    document.querySelector('#person').style.borderColor = 'var(--alert)'
+                } else {
+                    const bill = Number(document.querySelector('#bill').value)
+                    const people = Number(document.querySelector('#person').value)
+                    let tip;
+                    for (let i = 0; i < tips.length - 1; i++) {
+                        if (tips[i].classList.contains('active')) tip = Number(tips[i].textContent)
+                    }
+                    if (tip == null) tip = Number(document.querySelector('#customTip').value)
+                    const perBill = Number(parseFloat(bill / people).toFixed(2))
+                    const perTip = Number(parseFloat(perBill * tip / 100).toFixed(2))
+                    const perTot = perBill + perTip
+                    document.querySelector('#tip-person').textContent = perTip
+                    document.querySelector('#total-person').textContent = perTot
+                }
+            };
+        };
+    </script>
+
+    <div class="attribution">
+        Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. Coded by <a href="#">Amarsaikhan.B.E</a>.
+    </div>
+</body>
+
+</html>
